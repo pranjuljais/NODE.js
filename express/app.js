@@ -20,9 +20,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
-  User.findById("67d1ce7a0e9b263090b4e0e6")
+  User.findById("67d6c89f8594d8bbd64e1b77")
     .then((user) => {
-      req.user = new User(user.name, user.email, user.cart, user._id);
+      req.user = user;
 
       next();
     })
@@ -36,11 +36,17 @@ app.use(errorController.get404);
 
 mongoose
   .connect(
-    "mongodb+srv://pranjuljaiswal10:npfacebook@cluster0.d0qa7.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0"
+    "mongodb+srv://pranjuljaiswal10:npfacebook@cluster0.d0qa7.mongodb.net/Shop?retryWrites=true&w=majority&appName=Cluster0"
   )
-  .then((result) => app.listen(3001))
+  .then((result) => {
+    const user = new User({
+      name: "Pranjul",
+      email: "pj@jais.com",
+      cart: {
+        items: [],
+      },
+    });
+    user.save();
+    app.listen(3001);
+  })
   .catch((err) => console.log(err));
-
-console.log("TEsting github");
-console.log("TEsting github");
-console.log("TEsting github");
